@@ -1,0 +1,21 @@
+void setup()
+{
+  pinMode(3,OUTPUT);
+  pinMode(5,OUTPUT);
+  pinMode(6,OUTPUT);
+  pinMode(A1,INPUT);
+  pinMode(8,INPUT_PULLUP);
+}
+
+void color(int r,int g,int b)
+{
+  analogWrite(3,r);
+  analogWrite(5,g);
+  analogWrite(6,b);
+}
+
+void loop()
+{
+  int n = analogRead(A1)/4;
+  color(n,n,n);
+}
