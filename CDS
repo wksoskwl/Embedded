@@ -1,0 +1,19 @@
+void setup() {
+  pinMode(3,OUTPUT);
+  pinMode(5,OUTPUT);
+  pinMode(A0,INPUT);
+}
+
+void loop() {
+  int a = analogRead(A0);
+  if(a>=600)
+  {
+    analogWrite(3,255);
+    analogWrite(5,0);
+  }
+  else
+  {
+    analogWrite(5,255);
+    analogWrite(3,0);
+  }
+}
