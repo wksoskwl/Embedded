@@ -1,0 +1,32 @@
+void setup() {
+  pinMode(13,OUTPUT);
+  pinMode(12,OUTPUT);
+  pinMode(A0,INPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  int n = analogRead(A0);
+  Serial.println(n);
+  if(n > 600)
+  {
+    digitalWrite(13,HIGH);
+    digitalWrite(12,HIGH);
+  }
+  else if(n > 400)
+  {
+    digitalWrite(13,HIGH);
+    digitalWrite(12,LOW);
+  }
+  else if(n > 200)
+  {
+    digitalWrite(13,LOW);
+    digitalWrite(12,HIGH);
+  }
+  else
+  {
+    digitalWrite(13,LOW);
+    digitalWrite(12,LOW);
+  }
+    
+}
