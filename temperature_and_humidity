@@ -1,0 +1,42 @@
+#include<DHT.h>
+
+#define DHTPIN 7
+#define DHTTYPE DHT11
+DHT dht (DHTPIN,DHTTYPE);
+
+void setup() {
+  dht.begin();
+  pinMode(13,OUTPUT);
+  pinMode(12,OUTPUT);
+  pinMode(11,OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  float C = dht.readTemperature(false);
+  Serial.println(C);
+  if(C<22)
+  {
+    digitalWrite(13,LOW);
+    digitalWrite(12,LOW);
+    digitalWrite(11,HIGH);
+  }
+  else if(C<25)
+  {
+    digitalWrite(13,LOW);
+    digitalWrite(12,HIGH);
+    digitalWrite(11,LOW);
+  }
+  else if(C<28)
+  {
+    digitalWrite(13,LOW);
+    digitalWrite(12,LOW);
+    digitalWrite(11,HIGH);
+  }
+  else
+  {
+    digitalWrite(13,HIGH);
+    digitalWrite(12,HIGH);
+    digitalWrite(11,HIGH); 
+  }
+}
