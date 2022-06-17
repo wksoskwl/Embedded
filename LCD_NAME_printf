@@ -1,0 +1,55 @@
+#include<LiquidCrystal_I2C.h>
+#include<Wire.h>
+
+byte Kim[] = {
+  B11101,
+  B00101,
+  B00101,
+  B00101,
+  B00000,
+  B00111,
+  B00101,
+  B00111
+};
+
+byte Min[] = {
+  B11101,
+  B10101,
+  B10101,
+  B11101,
+  B00000,
+  B00100,
+  B00100,
+  B00111
+};
+
+byte Seung[] = {
+  B00100,
+  B01010,
+  B10001,
+  B00000,
+  B11111,
+  B00100,
+  B01010,
+  B00100
+};
+
+LiquidCrystal_I2C lcd(0x27,16,2);
+void setup() {
+  lcd.init();
+  lcd.backlight();
+  lcd.clear();
+  lcd.createChar(0,Kim);
+  lcd.createChar(1,Min);
+  lcd.createChar(2,Seung);
+  lcd.createChar(3,c);
+  
+}
+
+void loop() {
+  for(int i = 0;i<=2;i++)
+  lcd.write(i);
+  delay(300);
+  lcd.clear();
+  
+}
