@@ -1,0 +1,38 @@
+#include<Keyboard.h>
+
+void setup() {
+  pinMode(7,INPUT);
+  Keyboard.begin();
+}
+
+void loop() {
+  if(digitalRead(7) == LOW)
+  {
+    Keyboard.write(KEY_LEFT_GUI);
+    delay(300);
+    Keyboard.write('b');
+    Keyboard.write('o');
+    Keyboard.write('o');
+    Keyboard.write('m');
+    Keyboard.write(32);
+    Keyboard.write('i');
+    Keyboard.write('m');
+    Keyboard.write('a');
+    Keyboard.write('g');
+    Keyboard.write('e');
+    delay(300);
+    Keyboard.write(KEY_RETURN);
+    delay(3000);
+    Keyboard.press(KEY_LEFT_GUI);
+    Keyboard.write('d');
+    delay(100);
+    Keyboard.releaseAll();
+    delay(100);
+    Keyboard.press(KEY_LEFT_ALT);
+    Keyboard.write(KEY_F4);
+    delay(100);
+    Keyboard.releaseAll();
+    delay(100);
+    Keyboard.write(KEY_RETURN);
+  }
+}
