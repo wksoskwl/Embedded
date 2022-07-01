@@ -1,0 +1,21 @@
+bool flag = false;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(10,INPUT);
+}
+
+void loop() {
+  int Bool = digitalRead(10);
+  if(Bool == 1 && flag == true){
+    Serial.println("We found man!");
+    flag = false;
+  }
+
+  if(Bool == 0&&flag == false)
+  {
+    Serial.println("We can't see!");
+    flag = true;
+  }
+  delay(1000);
+}
