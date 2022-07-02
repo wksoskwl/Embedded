@@ -20,4 +20,5 @@ void loop() {
   tone(11,523.2511);
   delay(1000);
   noTone(11);
+  delay(2000);
 }
