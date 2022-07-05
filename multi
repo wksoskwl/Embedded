@@ -1,0 +1,88 @@
+#include<LiquidCrystal_I2C.h>
+#include<Wire.h>
+
+unsigned long curr_millis = 0;
+unsigned long prev_millis = 0;
+unsigned long prev_millis_2 = 0;
+int duty = 0;
+int i = 0;
+bool b = 0;
+
+LiquidCrystal_I2C lcd(0x27,16,2);
+
+byte k[] = {
+  B11101,
+  B00101,
+  B00101,
+  B00101,
+  B00000,
+  B00111,
+  B00101,
+  B00111
+};
+
+byte m[] = {
+  B11101,
+  B10101,
+  B10101,
+  B11101,
+  B00000,
+  B00100,
+  B00100,
+  B00111
+};
+
+byte s[] = {
+  B00100,
+  B01010,
+  B10001,
+  B00000,
+  B11111,
+  B00100,
+  B01010,
+  B00100
+};
+
+void setup() {
+  Serial.begin(9600);
+  lcd.init();
+  lcd.backlight();
+  lcd.createChar(0,k);
+  lcd.createChar(1,m);
+  lcd.createChar(2,s);
+}
+
+void loop() {
+  curr_millis = millis();
+
+  if(curr_millis - prev_millis > 10)
+  {
+    prev_millis = curr_millis;
+    lcd.clear();
+    lcd.setCursor(i, b);
+    for(int k = 0;k<3;k++)
+    {
+      lcd.write(k);
+    }
+  }
+  else if(curr_millis - prev_millis == duty);
+
+  if(curr_millis - prev_millis_2 > 100)
+  {
+    prev_millis_2 = curr_millis;
+
+    duty++;
+    if(duty == 9) {
+      Serial.println("한칸이동");
+      i++;
+      duty = 1;
+    }
+    if(i == 16){
+    i = 0;
+    if(b == 0)
+    b = 1;
+    else
+    b = 0;
+    }
+  }
+}
