@@ -1,0 +1,35 @@
+#include<SoftwareSerial.h>
+SoftwareSerial BT(2,3);
+
+int R = 13;
+int G = 12;
+int B = 11;
+
+void RGB(int r,int g,int b)
+{
+  analogWrite(R,r);
+  analogWrite(G,g);
+  analogWrite(B,b);
+}
+
+void setup() {
+  BT.begin(9600);
+  pinMode(R,OUTPUT);
+  pinMode(G,OUTPUT);      
+  pinMode(B,OUTPUT);
+}
+
+void loop() {
+  if(BT.available())
+  {
+    int bt = BT.read(); 
+    if(bt == 1)
+    {
+      RGB(255,255,255);
+    }
+    if(bt == 2)
+    {
+      RGB(0,0,0);
+    }
+  }
+}
