@@ -1,0 +1,95 @@
+#include<LiquidCrystal_I2C.h>
+#include<Wire.h>
+
+int x = 0;
+int y = 0;
+
+byte O[] = {
+  B11111,
+  B11111,
+  B11111,
+  B11111,
+  B11111,
+  B11111,
+  B11111,
+  B11111  
+};
+
+byte Kim[] = {
+  B11101,
+  B00101,
+  B00101,
+  B00101,
+  B00000,
+  B00111,
+  B00101,
+  B00111
+};
+
+byte Min[] = {
+  B11101,
+  B10101,
+  B10101,
+  B11101,
+  B00000,
+  B00100,
+  B00100,
+  B00111
+};
+
+byte Seung[] = {
+  B00100,
+  B01010,
+  B10001,
+  B00000,
+  B11111,
+  B00100,
+  B01010,
+  B00100
+};
+
+LiquidCrystal_I2C lcd(0x27,16,2);
+void setup() {
+  pinMode(7,INPUT_PULLUP);
+  lcd.init();
+  lcd.backlight();
+  lcd.clear();
+  lcd.createChar(3,O);
+  lcd.createChar(0,Kim);
+  lcd.createChar(1,Min);
+  lcd.createChar(2,Seung);
+  
+}
+
+void loop() {
+  int X = analogRead(A0);
+  int Y = analogRead(A1);
+  int Z = digitalRead(7);
+  //for(int i = 0;i<=2;i++)
+  //lcd.write(i);
+  lcd.write(3);
+  if(Y < 100||Y>900)
+  {
+    if(y == 0)
+      y = 1;
+    else
+      y = 0;
+  }
+  if(X < 100)
+  {
+    if(x == 0)
+      x = 15;
+    else
+      x--;
+  }
+  if(X > 900)
+  {
+    if(x == 15)
+      x = 0;
+    else
+      x++;
+  }
+  delay(100);
+  lcd.clear();
+  lcd.setCursor(x,y);
+}
