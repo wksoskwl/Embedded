@@ -1,0 +1,24 @@
+int in1 = 7;
+int in2 = 5;
+
+void setup() {
+  pinMode(in1,OUTPUT);
+  pinMode(in2,OUTPUT);
+  pinMode(8,INPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  int data = digitalRead(8);
+  Serial.println(data);
+    if(data == HIGH)
+    {
+      digitalWrite(in1,LOW);
+      digitalWrite(in2,HIGH);
+    }
+    else if(data == LOW)
+    {
+      digitalWrite(in1,LOW);
+      digitalWrite(in2,LOW);
+    }
+}
