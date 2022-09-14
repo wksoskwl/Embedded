@@ -42,7 +42,6 @@ void setup() {
   lcd.createChar(0,Kim);
   lcd.createChar(1,Min);
   lcd.createChar(2,Seung);
-  lcd.createChar(3,c);
   
 }
 
