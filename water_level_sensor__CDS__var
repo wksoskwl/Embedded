@@ -10,6 +10,8 @@ void loop() {
   int var = analogRead(A3);
   int CDS = analogRead(A2);
   Serial.println(CDS);
+  Serial.println(water);
+  Serial.println(var);
   analogWrite(11,water);
   analogWrite(12,var);
   analogWrite(13,CDS);
