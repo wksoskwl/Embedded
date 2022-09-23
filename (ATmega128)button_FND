@@ -1,0 +1,105 @@
+ #define F_CPU 16000000UL
+ #include <avr/io.h>
+ #include <util/delay.h>
+
+void up();
+void down();
+void print();
+void re();
+void stop();
+
+unsigned int b1;
+
+int mode = 0;
+int i = 0;
+
+const int Anode_Number [10]={
+0xC0, //0
+0xF9, //1
+0xA4, //2
+0xB0, //3
+0x99, //4
+0x92, //5
+0x82,//6
+0xD8, //7
+0x80, //8
+0x90 //9
+};
+
+int main(void){
+	DDRD = 0xFF;
+	DDRC = 0x0F;
+	DDRA = 0xFF;
+	DDRB = 0x00;
+	PORTD = 0xFF;
+	PORTC = 0x0F;
+	while(1){
+		b1 = ~PINB & 0x0F; //버튼이 두개다
+		if (b1 > 0)	{
+			mode = b1;
+		}
+		switch(mode){
+			case 1:
+				up();
+				PORTA = 0x01;
+				break;
+			case 2:	
+				down();
+				PORTA = 0x02;
+				break;
+			case 4:
+				stop();
+				break;
+			case 8:
+				re();
+				break;
+			default:
+				print();
+		}
+	}
+}
+
+void up(){
+	if(i > 9999)	i = 0;
+		print();
+		i++;
+}
+
+void down(){
+		if(i < 0)	i = 9999;
+		print();
+		i--;
+}
+
+void stop(){
+	print();
+}
+
+void re(){
+	i = 0;
+	print();
+}
+
+void print(){
+	for(int l = 0;l<100;l++){
+		for(int j=0; j<4; j++){
+			PORTC = 0x00;
+			PORTC |= 0x01 << j;
+			switch(j){
+				case 0:
+				PORTD = Anode_Number[i/1000];
+				break;
+				case 1:
+				PORTD = Anode_Number[i%1000/100];
+				break;
+				case 2:
+				PORTD = Anode_Number[i%100/10];
+				break;
+				case 3:
+				PORTD = Anode_Number[i%10];
+				break;
+			}
+			_delay_ms(1);
+		}
+	}
+}
