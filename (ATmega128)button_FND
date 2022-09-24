@@ -34,7 +34,7 @@ int main(void){
 	PORTD = 0xFF;
 	PORTC = 0x0F;
 	while(1){
-		b1 = ~PINB & 0x0F; //버튼이 두개다
+		b1 = ~PINB & 0x0F; //버튼이 4개다
 		if (b1 > 0)	{
 			mode = b1;
 		}
