@@ -54,5 +54,4 @@ void loop()
         digitalWrite(pinnum[j],LOW);
     }
     delay(500);
-  
 }
