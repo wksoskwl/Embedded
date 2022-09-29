@@ -1,0 +1,85 @@
+#include<SoftwareSerial.h>
+#include<AFMotor.h>
+#define trig A1
+#define echo A0
+
+SoftwareSerial BT(A5,A4);
+AF_DCMotor m1(1);
+AF_DCMotor m2(2);
+
+long dur, dis;
+int mode = 0;
+
+void wave(){
+  digitalWrite(trig, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trig, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trig, LOW);
+  dur = pulseIn (echo, HIGH);
+  dis = dur * 17 / 1000;
+  Serial.println(dis);
+  if(dis < 20){
+    m1.run(RELEASE);
+    m2.run(RELEASE);
+  }
+  else{
+    m1.run(FORWARD);
+    m2.run(FORWARD);
+  }
+}
+
+void bt(){
+  if(BT.available()){
+    char b = BT.read();
+    Serial.println(b);
+    if(b == 'g'){
+      m1.run(FORWARD);
+      m2.run(FORWARD);
+    }
+    if(b == 'b'){
+      m1.run(BACKWARD);
+      m2.run(BACKWARD);
+    }
+    if(b == 'l'){
+      m1.run(BACKWARD);
+      m2.run(FORWARD);
+    }
+    if(b == 'r'){
+      m1.run(FORWARD);
+      m2.run(BACKWARD);
+    }
+    if(b == 's'){
+      m1.run(RELEASE);
+      m2.run(RELEASE);
+    }
+  }
+}
+
+void setup() {
+  m1.setSpeed(200);
+  m1.run(RELEASE);
+  m2.setSpeed(200);
+  m2.run(RELEASE);
+  Serial.begin(9600);
+  BT.begin(9600);
+}
+
+void loop() {
+  if(BT.available()){
+    char b = BT.read();
+    if(b == 'q'){
+      mode = !mode;
+      m1.run(RELEASE);
+    m2.run(RELEASE);
+    }
+  }
+  if(mode){
+    wave();
+    Serial.println("wave");
+  }
+  else{
+    bt();
+    //Serial.println("bt");
+  }
+}
