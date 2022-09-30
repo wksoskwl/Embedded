@@ -7,7 +7,7 @@ SoftwareSerial BT(A5,A4);
 AF_DCMotor m1(1);
 AF_DCMotor m2(2);
 
-long dur, dis;
+long int dur, dis;
 int mode = 0;
 
 void wave(){
