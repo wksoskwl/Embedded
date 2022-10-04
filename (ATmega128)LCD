@@ -1,0 +1,117 @@
+ #define F_CPU 16000000UL
+ #include <avr/io.h>
+ #include <util/delay.h>
+ //LCD의 명령어를 입력하는 함수
+ uint8_t hart[] = {
+	 0b00000,
+	 0b01010,
+	 0b10101,
+	 0b10001,
+	 0b01010,
+	 0b00100,
+	 0b00000,
+	 0b00000
+ };
+ 
+ uint8_t HART[] = {
+	 0b00000,
+	 0b01010,
+	 0b11111,
+	 0b11111,
+	 0b01110,
+	 0b00100,
+	 0b00000,
+	 0b00000
+ };
+ 
+ void COMMAND(unsigned char byte){
+	 _delay_ms(2);
+	 PORTE = (byte & 0xF0);
+	 PORTE &= 0xFE;
+	 PORTE &= 0xFD;
+	 _delay_us(1);
+	 PORTE |= 0x04;
+	 _delay_us(1);
+	 PORTE &= 0xFB; 
+	 PORTE = ((byte<<4) & 0xF0);
+	 PORTE &= 0xFE;
+	 PORTE &= 0xFD;
+	 _delay_us(1);
+	 PORTE |= 0x04;
+	 _delay_us(1);
+	 PORTE &= 0xFB;
+ }
+ //LCD에 데이터를 출력하는 함수
+ void DATA(unsigned char byte){
+	 _delay_ms(2);
+	 PORTE = (byte & 0xF0);
+	 PORTE |= 0x01;
+	 PORTE &= 0xFD;
+	 _delay_us(1);
+	 PORTE |= 0x04;
+	 _delay_us(1);
+	 PORTE &= 0xFB; 
+	 PORTE = ((byte<<4) & 0xF0);
+	 PORTE |= 0x01;
+	 PORTE &= 0xFD;
+	 _delay_us(1);
+	 PORTE |= 0x04;
+	 _delay_us(1);
+	 PORTE &= 0xFB;
+ }
+ //LCD를 시작, 초기화하는 함수
+ void LCD_INIT(){
+	 _delay_ms(30);
+	 COMMAND(0x20);
+	 _delay_ms(39);
+	 COMMAND(0x20);
+	 _delay_ms(1.53);
+	 COMMAND(0x20); 
+	 COMMAND(0x28);
+	 COMMAND(0x06);
+	 COMMAND(0x01);
+	 COMMAND(0x0C);
+ }
+ //LCD의 문자가 출력될 위치를 정하는 함수
+ void MOVE(int x, int y){
+	 if(y == 1) COMMAND(0x80 + x);
+	 else COMMAND(0xC0 + x);
+ }
+ //문자열을 출력하는 함수
+ void STRING(const char CHAR[], unsigned int len){
+	 for(int i=0; i<len; i++){
+		 DATA(CHAR[i]);
+	 }
+ }
+
+int main(void)
+{
+	DDRE = 0xFF;
+	PORTE = 0x00;
+	LCD_INIT();
+	MOVE(0,0);
+	for(int i = 0;i<8;i++){
+		COMMAND(0x40+i);
+		DATA(hart[i]);
+	}
+	for(int i = 0;i<8;i++){
+		COMMAND(0x48+i);
+		DATA(HART[i]);
+	}
+	
+    while (1) 
+    {
+		MOVE(0,1);
+		for(int i = 0;i<32;i++){
+			if(i == 16)	MOVE(0,2);
+			DATA(0x00);	
+		}
+		_delay_ms(500);
+		MOVE(0,1);
+		for(int i = 0;i<32;i++){
+			if(i == 16)	MOVE(0,2);
+			DATA(0x01);
+		}
+		_delay_ms(500);
+    }
+}
