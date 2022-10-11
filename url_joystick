@@ -1,0 +1,66 @@
+#include<LiquidCrystal_I2C.h>
+#include<Wire.h>
+LiquidCrystal_I2C lcd(0x27,16,2);
+
+char cnt = '0';
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(7,INPUT_PULLUP);
+  lcd.init();
+  lcd.backlight();
+  lcd.clear();
+}
+
+void loop() {
+  int X = analogRead(A0);
+  int Y = analogRead(A1);
+  int Z = digitalRead(7);
+  if(X < 100 || Y < 100){
+    if(cnt == '0')  cnt = '5';
+    else cnt--;
+    delay(500);
+  }
+  else if(X > 900 || Y > 900){
+    if(cnt == '5')  cnt = '0';
+    else cnt++;
+    delay(500);
+    
+  }
+  switch(cnt){
+    case '0':
+      lcd.print("That's Hilarious");
+      delay(100);
+      lcd.clear();
+      break;
+    case '1':
+      lcd.print("STAY");
+      delay(100);
+      lcd.clear();
+      break;
+    case '2':
+      lcd.print("Bad Habits");
+      delay(100);
+      lcd.clear();
+      break;
+    case '3':
+      lcd.print("abcdefu");
+      delay(100);
+      lcd.clear();
+      break;
+    case '4':
+      lcd.print("2002");
+      delay(100);
+      lcd.clear();
+      break;  
+    case '5':
+      lcd.print("Dangerously");
+      delay(100);
+      lcd.clear();
+      break;
+  }
+  if(Z == 0){
+    Serial.println(cnt);
+    delay(1000);
+  }
+}
