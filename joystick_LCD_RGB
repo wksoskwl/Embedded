@@ -1,0 +1,45 @@
+#include<LiquidCrystal_I2C.h>
+#include<Wire.h>
+LiquidCrystal_I2C lcd(0x27,16,2);
+
+int cnt;
+
+int b[7][3] = {{0,0,0},{0,0,1},{0,1,0},{0,1,1},{1,0,0},{1,0,1},{1,1,1}};
+
+void rgb(){
+  digitalWrite(13,b[cnt][0]);
+  digitalWrite(12,b[cnt][1]);
+  digitalWrite(11,b[cnt][2]);
+}
+
+void setup() {
+  pinMode(7,INPUT_PULLUP);
+  pinMode(13,OUTPUT);
+  pinMode(12,OUTPUT);
+  pinMode(11,OUTPUT);
+  Serial.begin(9600);
+  lcd.init();
+  lcd.backlight();
+  lcd.clear();
+}
+
+void loop() {
+  int X = analogRead(A0);
+  int Y = analogRead(A1);
+  int Z = digitalRead(7);
+  lcd.print("X : ");
+  lcd.print(X);
+  lcd.print(" Y : ");
+  lcd.print(Y);
+  lcd.setCursor(0,1);
+  lcd.print("Z : ");
+  lcd.print(Z);
+  lcd.setCursor(0,0);
+  delay(500);
+  lcd.clear();
+  if(Z == 0){
+    cnt++;
+    if(cnt == 7) cnt = 0;
+  }
+  rgb();
+}
