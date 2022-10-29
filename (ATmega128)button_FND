@@ -13,7 +13,7 @@ uint8_t b1;
 int mode = 0;
 int i = 0;
 
-const int Anode_Number [10]={
+const int Anode_Number [10]={ //애노드 캐소드는 ~을 붙여주면 된다.
 0xC0, //0
 0xF9, //1
 0xA4, //2
