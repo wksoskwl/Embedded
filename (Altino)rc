@@ -1,0 +1,85 @@
+#include <Altino.h>
+
+Altino sensor;
+int piezo[] = {37,39,41,42,44,46,48,49};
+
+void setup() {
+  Open();
+}
+
+void loop() {
+  while(1){
+    if(sensor.IR[6] > 200)  break;
+  }
+  while(1){
+    auto_test1101(7,350,-400);
+    if(sensor.CDS < 150)  break;
+  }
+  Go(-350,-350);
+  delay(200);
+  Go(0,0);
+  for(int cnt = 0;cnt < 8;cnt++){
+    sound(piezo[cnt]);
+    delay(500);
+  }
+  sound(0);
+  int oldtime = millis();
+  while(1){
+    auto_test1101(7,350,-400);
+    if(sensor.CDS < 150 && millis() - oldtime > 6000)  break;
+  }
+  Go(-350,-350);
+  delay(200);
+  Go(0,0);
+  displayline(0x38,0x44,0x42,0x21,0x21,0x42,0x44,0x38);
+  delay(1000);
+  displayline(0,0,0,0,0,0,0,0);
+  for(int i = 1;i<=8;i++){
+    for(int j = 1;j<=8;j++){
+      if((i>3&&i<6)||(j>3&&j<6))  displayon(i,j);
+    }
+  }
+  delay(1000);
+  displayline(0,0,0,0,0,0,0,0);
+}
+
+void auto_test1101(int th, int sp, int bsp){
+  if(sensor.IR[1] > th&&sensor.IR[2] > th&&sensor.IR[3] > th){
+    if(sensor.IR[4] > sensor.IR[5]){
+      go(bsp,bsp);
+      Steering(127);      
+    }
+    else{
+      go(bsp,bsp);
+      Steering(-127);
+    }
+  }
+  else if(sensor.IR[1] > 100&&sensor.IR[2] > th){
+    go(bsp,bsp);
+    Steering(-127);
+  }
+  else if(sensor.IR[1] > th&&sensor.IR[2] > th){
+    go(sp,sp);
+    Steering(127);
+  }
+  else if(sensor.IR[2] > th&&sensor.IR[3] > 100){
+    go(bsp,bsp);
+    Steering(127);
+  }
+  else if(sensor.IR[2] > th&&sensor.IR[3] > th){
+    go(sp,sp);
+    Steering(-127);
+  }
+  else if(sensor.IR[1] > th){
+    go(sp,sp);
+    Steering(64);
+  }
+  else if(sensor.IR[3] > th){
+    go(sp,sp);
+    Steering(-64);
+  }
+  else{
+    go(sp,sp);
+    Steering(0);
+  }
+}
