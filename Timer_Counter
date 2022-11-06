@@ -1,0 +1,57 @@
+unsigned int count=0; 
+//인터럽트가 돌면 올리는 카운트
+char toggle0=1;
+//블링크를 위한 토글 
+ 
+
+void setup() {
+  pinMode(13, OUTPUT);
+  //디지털13번핀 사용
+  TCCR0A = 0; //TCCR0A initialize
+  TCCR0B = 0; //TCCR0B initialize
+  TCNT0 = 0;  //TCNT0 initialize
+  //레지스터 초기화
+  OCR0A= 255; 
+  //비교일치 카운터로 타이머카운터와 비교한다
+  TCCR0B |= (1<<WGM02);
+  //TCT모드 사용 선언
+  TCCR0B |= (1<<CS02) | (0<<CS00);
+  //분주비 설정(기본값은 0이므로 CS00은 안건드려도 됨)
+  TIMSK0 |= (1<<OCIE0A);
+  //비교일치카운터 사용 선언 
+  sei();
+  //전역적으로 인터럽트 사용선언
+}
+
+ISR(TIMER0_COMPA_vect){
+  //타이머 인터럽트가 발생하면 오는 함수
+  count++;
+  //타이머 인터럽트가 발생할때마다 증가
+  if(count>250)
+  //인터럽트가 1번 발생할때 4ms 1초를 만들기 위함
+  {
+    if (toggle0){
+        digitalWrite(13,HIGH);
+        toggle0 = 0;
+      }
+    else{
+      digitalWrite(13,LOW);
+      toggle0 = 1;
+    }
+    count=0;
+    TCNT0=0;
+    //CNT초기화
+  }
+}
+
+ 
+
+ 
+
+void loop() {
+
+  // put your main code here, to run repeatedly:
+
+ 
+
+}
