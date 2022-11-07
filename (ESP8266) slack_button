@@ -1,0 +1,65 @@
+#include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
+
+const char* ssid = "";
+const char* password = "";
+
+const char* url =
+"https://hooks.slack.com/services/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";
+
+#define BUTTON_PIN D3
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(BUTTON_PIN,INPUT_PULLUP);
+
+  WiFi.begin(ssid, password);
+  Serial.println("Connecting");
+  while(WiFi.status() != WL_CONNECTED){
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  Serial.print("Connected to WiFi network with IP Address: ");
+  Serial.println(WiFi.localIP());
+}
+
+void loop() {
+  int btnValue = btn_click();
+  if(btnValue == 1){
+    int httpResponseCode = sendSlack("초인종(버튼)이 눌렸습니다");
+    Serial.println(httpResponseCode);
+  }
+}
+
+
+int btn_click(){
+  static int prevBtn = 0;
+  static int currBtn = 0;
+
+  currBtn = !digitalRead(BUTTON_PIN);
+
+  if(currBtn != prevBtn){
+    prevBtn = currBtn;
+    if(currBtn == 1){
+      return 1;
+    }
+    delay(50);
+  }
+  return 0;
+}
+
+int sendSlack(String strMsg){
+  if(WiFi.status() == WL_CONNECTED){
+    WiFiClientSecure client;
+    client.setInsecure();
+    client.connect(url, 443);
+    HTTPClient https;
+    https.begin(client, url);
+    https.addHeader("Content-Type", "application/json");
+    int httpResponseCode = https.POST("{\"text\":\"" + strMsg + "\"}");
+    https.end();
+
+    return httpResponseCode;
+  }
+}
