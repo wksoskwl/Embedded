@@ -1,0 +1,26 @@
+#include <Servo.h> 
+int servoPin = 9;
+Servo servo; 
+int angle = 0; 
+String c;
+
+void setup()
+{
+  Serial.begin(9600);
+    servo.attach(servoPin); 
+    Serial.setTimeout(100);
+}
+
+void loop() 
+{ 
+  if(Serial.available())
+  {
+    c = Serial.readString();
+    angle = c.toInt();
+    //angle = Serial.parseInt(SKIP_ALL);
+    //if(angle != '\0' || angle == 0){
+    servo.write(angle);
+    } 
+  //}
+  
+} 
